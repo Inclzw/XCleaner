@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Reflection;
+using System.Text;
 using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,11 +45,15 @@ namespace XCleaner
                 // Main window with navigation
                 services.AddSingleton<INavigationWindow, MainWindow>();
                 services.AddSingleton<MainWindowViewModel>();
+                services.AddSingleton<IContentDialogService, ContentDialogService>();
 
-                services.AddSingleton<DashboardPage>();
-                services.AddSingleton<DashboardViewModel>();
-                services.AddSingleton<DataPage>();
-                services.AddSingleton<DataViewModel>();
+                // services.AddSingleton<DashboardPage>();
+                // services.AddSingleton<DashboardViewModel>();
+                // services.AddSingleton<DataPage>();
+                // services.AddSingleton<DataViewModel>();
+                services.AddSingleton<CleanerPage>();
+                services.AddSingleton<CleanerViewModel>();
+                services.AddSingleton<CleanerService>();
                 services.AddSingleton<SettingsPage>();
                 services.AddSingleton<SettingsViewModel>();
             }).Build();
@@ -67,6 +71,7 @@ namespace XCleaner
         /// </summary>
         private async void OnStartup(object sender, StartupEventArgs e)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             await _host.StartAsync();
         }
 

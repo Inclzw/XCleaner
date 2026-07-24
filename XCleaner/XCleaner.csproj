@@ -32,6 +32,8 @@
     <Resource Include="Assets\wpfui-icon-256.png" />
     <Resource Include="Assets\wpfui-icon-1024.png" />
     <Resource Include="Assets\XCleaner-256.png" />
+    <None Remove="Assets\folder-256.png" />
+    <Resource Include="Assets\folder-256.png" />
   </ItemGroup>
 
 </Project>
