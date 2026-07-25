@@ -1,0 +1,57 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: XCleaner.sln
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.316
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test
+
+    - name: Publish
+      run: |
+        dotnet publish XCleaner/XCleaner.csproj `
+          -c Release `
+          -r win-x64 `
+          --self-contained false `
+          -p:PublishSingleFile=true `
+          -p:PublishReadyToRun=true `
+          -o publish
+
+    - name: Create ZIP
+      run: |
+        Remove-Item publish/*.pdb -Force
+        Compress-Archive -Path publish/* -DestinationPath XCleaner-win-x64.zip
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          XCleaner-win-x64.zip
