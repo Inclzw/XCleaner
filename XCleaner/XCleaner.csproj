@@ -8,6 +8,9 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>XCleaner.App</StartupObject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Authors>Glitchspire</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +42,11 @@
     <Resource Include="Assets\XCleaner-256.png" />
     <None Remove="Assets\folder-256.png" />
     <Resource Include="Assets\folder-256.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Page Include="App.xaml" />
   </ItemGroup>
 
 </Project>

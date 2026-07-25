@@ -1,11 +1,15 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Velopack;
+using Velopack.Locators;
 using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
+using XCleaner.Helpers;
 using XCleaner.Services;
 using XCleaner.ViewModels.Pages;
 using XCleaner.ViewModels.Windows;
@@ -61,9 +65,26 @@ namespace XCleaner
         /// <summary>
         /// Gets services.
         /// </summary>
-        public static IServiceProvider Services
+        public static IServiceProvider Services => _host.Services;
+#if DEBUG
+        public static TestVelopackLocator? Locator;
+#endif
+        [STAThread]
+        private static void Main(string[] args)
         {
-            get { return _host.Services; }
+#if DEBUG
+            Locator = new TestVelopackLocator(
+                appId: "XCleaner",
+                version: "0.0.1",
+                packagesDir: "packages"
+            );
+            VelopackApp.Build().SetLocator(Locator).Run();
+#else
+            VelopackApp.Build().Run();
+#endif
+            App app = new();
+            app.InitializeComponent();
+            app.Run();
         }
 
         /// <summary>
