@@ -43,18 +43,26 @@ jobs:
         dotnet publish XCleaner/XCleaner.csproj `
           -c Release `
           -r win-x64 `
-          --self-contained false `
-          -p:PublishSingleFile=true `
+          --self-contained true `
+          -p:PublishSingleFile=false `
           -p:PublishReadyToRun=true `
           -o publish
 
-    - name: Create ZIP
+    - name: Velopack
+      shell: pwsh
       run: |
-        Remove-Item publish/*.pdb -Force
-        Compress-Archive -Path publish/* -DestinationPath XCleaner-win-x64.zip
+        $version = "${{ github.ref_name }}".TrimStart("v")
+        dotnet tool install -g vpk
+        vpk pack `
+          --packId Glitchspire.XCleaner `
+          --packTitle XCleaner `
+          --packAuthors Glitchspire `
+          --packVersion $version `
+          --packDir publish `
+          --mainExe XCleaner.exe
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          XCleaner-win-x64.zip
+          Releases/*
