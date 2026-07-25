@@ -4,5 +4,6 @@ public enum CleanFolder
 {
     Local,
     LocalLow,
-    Roaming
+    Roaming,
+    ProgramData
 }

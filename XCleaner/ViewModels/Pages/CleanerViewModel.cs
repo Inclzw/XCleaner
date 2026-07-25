@@ -164,6 +164,7 @@ public partial class CleanerViewModel : ObservableObject
             CleanFolder.Roaming => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             CleanFolder.LocalLow => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "AppData", "LocalLow"),
+            CleanFolder.ProgramData => Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
